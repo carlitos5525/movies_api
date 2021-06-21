@@ -65,7 +65,7 @@ class MovieListAV(APIView):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.erros)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 class MovieDetailAV(APIView):

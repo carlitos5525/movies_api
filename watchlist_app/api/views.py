@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
-from watchlist_app.models import WatchList, StreamPlatform
-from watchlist_app.api.serializers import StreamPlataformSerializer, WatchListSerializer
+from watchlist_app.models import WatchList, StreamPlatform, Review
+from watchlist_app.api.serializers import StreamPlataformSerializer, WatchListSerializer, ReviewSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -144,3 +144,4 @@ class StreamPlatformDetailAV(APIView):
             return Response({'error': 'Stream platform does not exist'}, status=status.HTTP_404_NOT_FOUND)
         stream_platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    

@@ -4,6 +4,8 @@ from watchlist_app.api.serializers import StreamPlataformSerializer, WatchListSe
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework import mixins
+from rest_framework import generics
 
 
 # @api_view(['GET', 'POST'])
@@ -144,4 +146,43 @@ class StreamPlatformDetailAV(APIView):
             return Response({'error': 'Stream platform does not exist'}, status=status.HTTP_404_NOT_FOUND)
         stream_platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
     
+# class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer    
+    
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+
+
+# class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer 
+
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+
+class ReviewList(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Review.objects.filter(watchlist=pk)   
+
+class ReviewCreate(generics.CreateAPIView):
+    serializer_class = ReviewSerializer
+
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        watchlist = WatchList.objects.get(id=pk)
+
+        serializer.save(watchlist=watchlist)
+
+
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer

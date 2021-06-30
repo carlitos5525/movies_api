@@ -7,9 +7,11 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 
 
 # @api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
 # def movie_list(request):
 #     if request.method == 'GET':
 #         movies = Movie.objects.all()
@@ -56,7 +58,8 @@ from rest_framework.exceptions import ValidationError
 
 
 class WatchListAV(APIView):
-    
+    permission_classes = (IsAuthenticated, )
+
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -72,6 +75,7 @@ class WatchListAV(APIView):
     
 
 class WacthDetailAV(APIView):
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request, pk):
         try:
@@ -103,6 +107,8 @@ class WacthDetailAV(APIView):
 
 
 class StreamPlatformListAV(APIView):
+    permission_classes = (IsAuthenticated, )
+
 
     def get(self, request):
         stream_platforms = StreamPlatform.objects.all()
@@ -119,6 +125,7 @@ class StreamPlatformListAV(APIView):
 
 
 class StreamPlatformDetailAV(APIView):
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request, pk):
         try:
@@ -169,12 +176,15 @@ class StreamPlatformDetailAV(APIView):
 
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = (IsAuthenticated, )
+
 
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)   
 
 class ReviewCreate(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated, )
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 

@@ -7,7 +7,8 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 
 # @api_view(['GET', 'POST'])
@@ -58,7 +59,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class WatchListAV(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (AdminOrReadOnly, IsAuthenticated)
 
     def get(self, request):
         movies = WatchList.objects.all()
@@ -125,7 +126,7 @@ class StreamPlatformListAV(APIView):
 
 
 class StreamPlatformDetailAV(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request, pk):
         try:
@@ -200,5 +201,6 @@ class ReviewCreate(generics.CreateAPIView):
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated, ReviewUserOrReadOnly)
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer

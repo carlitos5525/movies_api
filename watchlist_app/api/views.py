@@ -8,6 +8,7 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.authentication import TokenAuthentication
 from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 
@@ -60,6 +61,7 @@ from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 class WatchListAV(APIView):
     permission_classes = (AdminOrReadOnly, IsAuthenticated)
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request):
         movies = WatchList.objects.all()
@@ -77,6 +79,8 @@ class WatchListAV(APIView):
 
 class WacthDetailAV(APIView):
     permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
 
     def get(self, request, pk):
         try:
@@ -109,6 +113,7 @@ class WacthDetailAV(APIView):
 
 class StreamPlatformListAV(APIView):
     permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
 
     def get(self, request):
@@ -127,6 +132,7 @@ class StreamPlatformListAV(APIView):
 
 class StreamPlatformDetailAV(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
+    authentication_classes = (TokenAuthentication, )
 
     def get(self, request, pk):
         try:
@@ -178,6 +184,7 @@ class StreamPlatformDetailAV(APIView):
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
 
     def get_queryset(self):
@@ -188,6 +195,7 @@ class ReviewCreate(generics.CreateAPIView):
     permission_classes = (IsAuthenticated, )
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    authentication_classes = (TokenAuthentication, )
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
@@ -208,5 +216,6 @@ class ReviewCreate(generics.CreateAPIView):
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated, ReviewUserOrReadOnly)
+    authentication_classes = (TokenAuthentication, )
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer

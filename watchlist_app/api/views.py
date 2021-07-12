@@ -78,7 +78,7 @@ class WatchListAV(APIView):
     
 
 class WacthDetailAV(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, AdminOrReadOnly)
     authentication_classes = (TokenAuthentication, )
 
 
@@ -112,7 +112,7 @@ class WacthDetailAV(APIView):
 
 
 class StreamPlatformListAV(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, AdminOrReadOnly )
     authentication_classes = (TokenAuthentication, )
 
 
@@ -131,7 +131,7 @@ class StreamPlatformListAV(APIView):
 
 
 class StreamPlatformDetailAV(APIView):
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly, AdminOrReadOnly)
     authentication_classes = (TokenAuthentication, )
 
     def get(self, request, pk):
@@ -183,7 +183,6 @@ class StreamPlatformDetailAV(APIView):
 
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
-    permission_classes = (IsAuthenticated, )
     authentication_classes = (TokenAuthentication, )
 
 
@@ -192,7 +191,7 @@ class ReviewList(generics.ListAPIView):
         return Review.objects.filter(watchlist=pk)   
 
 class ReviewCreate(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     authentication_classes = (TokenAuthentication, )

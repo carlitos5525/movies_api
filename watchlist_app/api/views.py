@@ -10,6 +10,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+from rest_framework.throttling import UserRateThrottle
+from watchlist_app.api.throttling import ReviewCreateThrottling, ReviewListThrottling
 
 
 # @api_view(['GET', 'POST'])
@@ -184,17 +186,19 @@ class StreamPlatformDetailAV(APIView):
 class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     authentication_classes = (TokenAuthentication, )
-
+    throttle_classes = [ReviewListThrottling]
 
     def get_queryset(self):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)   
+
 
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     authentication_classes = (TokenAuthentication, )
+    throttle_classes = [ReviewCreateThrottling]
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')

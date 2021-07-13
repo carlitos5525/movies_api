@@ -127,8 +127,19 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }
+REST_FRAMEWORK = {
+# #     'DEFAULT_PERMISSION_CLASSES': [
+# #         'rest_framework.permissions.IsAuthenticated',
+# #     ],
+#      'DEFAULT_THROTTLE_CLASSES': [
+#         'rest_framework.throttling.AnonRateThrottle',
+#         'rest_framework.throttling.UserRateThrottle'
+#     ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1/day',
+        'user': '3/day',
+        'review-create': '1/day',
+        'review-list': '5/day'
+    }
+    
+}

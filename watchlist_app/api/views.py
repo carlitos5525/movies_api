@@ -3,7 +3,7 @@ from watchlist_app.models import WatchList, StreamPlatform, Review
 from watchlist_app.api.serializers import StreamPlataformSerializer, WatchListSerializer, ReviewSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework import pagination, status
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
@@ -12,7 +12,7 @@ from rest_framework.authentication import TokenAuthentication
 from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 from rest_framework.throttling import UserRateThrottle
 from watchlist_app.api.throttling import ReviewCreateThrottling, ReviewListThrottling
-
+from watchlist_app.api.pagination import ReviewListPagination
 
 # @api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
@@ -187,6 +187,7 @@ class ReviewList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     authentication_classes = (TokenAuthentication, )
     throttle_classes = [ReviewListThrottling]
+    pagination_class = ReviewListPagination
 
     def get_queryset(self):
         pk = self.kwargs['pk']

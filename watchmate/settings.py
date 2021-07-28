@@ -139,7 +139,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '1/day',
         'user': '3/day',
-        'review-create': '1/day',
+        'review-create': '3/day',
         'review-list': '5/day'
     },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
